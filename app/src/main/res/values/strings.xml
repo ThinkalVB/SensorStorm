@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Sensor Storm</string>
+    <string name="start">START</string>
+    <string name="stop">STOP</string>
+    <string name="port_number">Port Number</string>
+    <string name="ip_address">IP Address</string>
+    <string name="def_ip_address">10.0.2.2</string>
+    <string name="def_port_number">1357</string>
+    <string name="acceleration">Acceleration</string>
+    <string name="location">Location</string>
+    <string name="camera">Camera</string>
+    <string name="light">Light</string>
+    <string name="rotation_vector">Rotation Vector</string>
+    <string name="ambient_temperature">Ambient Temperature</string>
+    <string name="relative_humidity">Relative Humidity</string>
+    <string name="pressure">Pressure</string>
+    <string name="proximity">Proximity</string>
+    <string name="gravity">Gravity</string>
+    <string name="magnetic_field">Magnetic Field</string>
+</resources>
