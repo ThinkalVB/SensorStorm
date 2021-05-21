@@ -50,6 +50,8 @@ class Broadcaster(private val mDestinationIP: InetAddress, private val mDestinat
     companion object{
         private var mDataBuffer: ByteBuffer = ByteBuffer.allocate(MAX_PACKET_SIZE).order(ByteOrder.LITTLE_ENDIAN)
         private var mImageBuffer: ByteBuffer = ByteBuffer.allocate(MAX_PACKET_SIZE).order(ByteOrder.LITTLE_ENDIAN)
+
+        private var mFrameNumber = 0
         private var mDataBufferLock: Lock = ReentrantLock()
         private var mImageBufferLock: Lock = ReentrantLock()
 
@@ -60,13 +62,18 @@ class Broadcaster(private val mDestinationIP: InetAddress, private val mDestinat
             mDataBufferLock.unlock()
         }
 
+        /* SensorCode -- FrameNumber -- FrameSize -- StartingIndex -- NoOfBytes */
         fun sendFrame(image: ByteArray) {
             mImageBufferLock.lock()
-            val imageDataSize = image.size + (Int.SIZE_BYTES * 2)
+            val imageDataSize = image.size + (Int.SIZE_BYTES * 5)
             if(mImageBuffer.remaining() > imageDataSize) {
                 mImageBuffer.putInt(CAM_SENSOR_CODE)
+                mImageBuffer.putInt(mFrameNumber)
+                mImageBuffer.putInt(image.size)
+                mImageBuffer.putInt(0)
                 mImageBuffer.putInt(image.size)
                 mImageBuffer.put(image)
+                mFrameNumber++
             } else mImageBuffer.clear()
             mImageBufferLock.unlock()
         }
