@@ -8,7 +8,9 @@ import java.nio.ByteOrder
 import java.util.concurrent.locks.Lock
 import java.util.concurrent.locks.ReentrantLock
 
-private const val MAX_PACKET_SIZE = 65507
+private const val MAX_PACKET_SIZE = 65500
+private const val PACKET_BUFFER_COUNT = 3
+private const val IMAGE_HEADER_SIZE = (Int.SIZE_BYTES * 5)
 private const val CAM_SENSOR_CODE = 121
 
 class Broadcaster(private val mDestinationIP: InetAddress, private val mDestinationPort: Int) : Runnable {
@@ -25,22 +27,16 @@ class Broadcaster(private val mDestinationIP: InetAddress, private val mDestinat
             return
         }
 
-        while(!Thread.currentThread().isInterrupted)
-        {
-            if(mDataBuffer.position() != 0) {
-                mDataBufferLock.lock()
-                val packet = DatagramPacket(mDataBuffer.array(), mDataBuffer.position(), mDestinationIP, mDestinationPort)
-                mDataBuffer.clear()
-                mDataBufferLock.unlock()
-                mUdpSocket.send(packet)
-            }
-
-            if(mImageBuffer.position() != 0) {
-                mImageBufferLock.lock()
-                val packet = DatagramPacket(mImageBuffer.array(), mImageBuffer.position(), mDestinationIP, mDestinationPort)
-                mImageBuffer.clear()
-                mImageBufferLock.unlock()
-                mUdpSocket.send(packet)
+        while(!Thread.currentThread().isInterrupted) {
+            for (index in 0 until PACKET_BUFFER_COUNT - 1) {
+                if(mPacketBufferLock[index].tryLock()) {
+                    if(mPacketBuffer[index].position() != 0) {
+                        val packet = DatagramPacket(mPacketBuffer[index].array(), mPacketBuffer[index].position(), mDestinationIP, mDestinationPort)
+                        mPacketBuffer[index].clear()
+                        mUdpSocket.send(packet)
+                    }
+                    mPacketBufferLock[index].unlock()
+                }
             }
         }
         mUdpSocket.close()
@@ -48,34 +44,53 @@ class Broadcaster(private val mDestinationIP: InetAddress, private val mDestinat
     }
 
     companion object{
-        private var mDataBuffer: ByteBuffer = ByteBuffer.allocate(MAX_PACKET_SIZE).order(ByteOrder.LITTLE_ENDIAN)
-        private var mImageBuffer: ByteBuffer = ByteBuffer.allocate(MAX_PACKET_SIZE).order(ByteOrder.LITTLE_ENDIAN)
-
+        private var mPacketBuffer = Array<ByteBuffer>(PACKET_BUFFER_COUNT) { ByteBuffer.allocate(MAX_PACKET_SIZE).order(ByteOrder.LITTLE_ENDIAN) }
+        private var mPacketBufferLock = Array<Lock>(PACKET_BUFFER_COUNT) { ReentrantLock() }
         private var mFrameNumber = 0
-        private var mDataBufferLock: Lock = ReentrantLock()
-        private var mImageBufferLock: Lock = ReentrantLock()
 
         fun sendData(data: ByteArray){
-            mDataBufferLock.lock()
-            if(mDataBuffer.remaining() > data.size) mDataBuffer.put(data)
-            else mDataBuffer.clear()
-            mDataBufferLock.unlock()
+            for (index in 0 until PACKET_BUFFER_COUNT - 1) {
+                if(mPacketBufferLock[index].tryLock()) {
+                    if(mPacketBuffer[index].remaining() > data.size) {
+                        mPacketBuffer[index].put(data)
+                        mPacketBufferLock[index].unlock()
+                        break
+                    } else mPacketBufferLock[index].unlock()
+                }
+            }
         }
 
         /* SensorCode -- FrameNumber -- FrameSize -- StartingIndex -- NoOfBytes */
         fun sendFrame(image: ByteArray) {
-            mImageBufferLock.lock()
-            val imageDataSize = image.size + (Int.SIZE_BYTES * 5)
-            if(mImageBuffer.remaining() > imageDataSize) {
-                mImageBuffer.putInt(CAM_SENSOR_CODE)
-                mImageBuffer.putInt(mFrameNumber)
-                mImageBuffer.putInt(image.size)
-                mImageBuffer.putInt(0)
-                mImageBuffer.putInt(image.size)
-                mImageBuffer.put(image)
-                mFrameNumber++
-            } else mImageBuffer.clear()
-            mImageBufferLock.unlock()
+            val imageBuffer = ByteBuffer.wrap(image)
+            mFrameNumber++
+
+            /* While their is some image data left to be send   */
+            while (true) {
+                /* Iterate through all the available buffers    */
+                for (index in 0 until PACKET_BUFFER_COUNT - 1) {
+                    /* Try to access the buffer                 */
+                    if (imageBuffer.remaining() == 0) return
+                    if(mPacketBufferLock[index].tryLock()) {
+                        if(mPacketBuffer[index].remaining() > IMAGE_HEADER_SIZE){
+                            mPacketBuffer[index].putInt(CAM_SENSOR_CODE)
+                            mPacketBuffer[index].putInt(mFrameNumber)
+                            mPacketBuffer[index].putInt(image.size)
+
+                            val packetFreeSpace = mPacketBuffer[index].remaining() - ( Int.SIZE_BYTES * 2)
+                            val imageFragmentSize =
+                                if(packetFreeSpace >= imageBuffer.remaining()) imageBuffer.remaining()
+                                else packetFreeSpace
+
+                            mPacketBuffer[index].putInt(imageBuffer.position())
+                            mPacketBuffer[index].putInt(imageFragmentSize)
+                            imageBuffer.get(mPacketBuffer[index].array(), mPacketBuffer[index].position(), imageFragmentSize)
+                            mPacketBuffer[index].position(mPacketBuffer[index].position() + imageFragmentSize)
+                        }
+                        mPacketBufferLock[index].unlock()
+                    }
+                }
+            }
         }
     }
 }
