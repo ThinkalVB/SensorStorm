@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity() {
     private fun startServices() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         if(findViewById<CheckBox>(R.id.cb_camera).isChecked) {
-            mCamera.startCamera(this)
+            mCamera.startCamera(this,90, 0f)
             if(!mCamera.isRunning) showToast("No Camera permission")
         }
         if (findViewById<CheckBox>(R.id.cb_location).isChecked) {

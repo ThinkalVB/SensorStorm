@@ -4,13 +4,14 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.ImageFormat
+import android.graphics.Matrix
 import android.media.Image
 import android.util.Size
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
-import androidx.core.content.ContextCompat
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.content.ContextCompat
 import androidx.renderscript.*
 import com.example.camerax.ScriptC_yuv420888
 import com.google.common.util.concurrent.ListenableFuture
@@ -34,14 +35,26 @@ class Camera(activity: Activity) {
     private var mRS: RenderScript = RenderScript.create(activity)
     private var mYuv420: ScriptC_yuv420888 = ScriptC_yuv420888(mRS)
 
+    private var mQuality = 90
+    private var mRotation = 90f
+
     inner class ImageAnalyzer : ImageAnalysis.Analyzer{
 
         override fun analyze(imageProxy: ImageProxy) {
             if(imageProxy.format == ImageFormat.YUV_420_888) {
                 val capturedFrame = toRGBA(imageProxy, imageProxy.image!!.width, imageProxy.image!!.height)
-                val stream = ByteArrayOutputStream()
-                capturedFrame!!.compress(Bitmap.CompressFormat.JPEG, 90, stream)
-                Broadcaster.sendFrame(stream.toByteArray())
+                if(mRotation != 0f ){
+                    val rotMatrix = Matrix()
+                    rotMatrix.setRotate(mRotation)
+                    val finalBitmap = Bitmap.createBitmap(capturedFrame!!,0,0, capturedFrame.width, capturedFrame.height, rotMatrix,true)
+                    val stream = ByteArrayOutputStream()
+                    finalBitmap.compress(Bitmap.CompressFormat.JPEG, mQuality, stream)
+                    Broadcaster.sendFrame(stream.toByteArray())
+                }else{
+                    val stream = ByteArrayOutputStream()
+                    capturedFrame!!.compress(Bitmap.CompressFormat.JPEG, mQuality, stream)
+                    Broadcaster.sendFrame(stream.toByteArray())
+                }
             }
             imageProxy.close()
         }
@@ -114,7 +127,10 @@ class Camera(activity: Activity) {
         }
     }
 
-    fun startCamera(activity: MainActivity) {
+    fun startCamera(activity: MainActivity, quality: Int, rotation: Float){
+        mQuality = quality
+        mRotation = rotation
+
         if(!isAvailable) return
         isRunning = try {
             cameraProvider.bindToLifecycle(activity, cameraSelector, imageAnalyzer)
