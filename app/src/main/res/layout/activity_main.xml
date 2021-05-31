@@ -2,30 +2,26 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity" >
 
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/ip_address"
+        app:layout_constraintBottom_toTopOf="@+id/textView6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:clickable="true"
-            android:focusableInTouchMode="true"
-            app:layout_constraintBottom_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:focusableInTouchMode="true">
 
             <CheckBox
                 android:id="@+id/cb_location"
@@ -55,6 +51,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cb_camera" />
 
+            <SeekBar
+                android:id="@+id/sb_acceleration"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:max="3"
+                app:layout_constraintBottom_toBottomOf="@+id/cb_acceleration"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/cb_acceleration" />
+
             <CheckBox
                 android:id="@+id/cb_rotationVector"
                 android:layout_width="wrap_content"
@@ -63,6 +68,15 @@
                 android:text="@string/rotation_vector"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cb_acceleration" />
+
+            <SeekBar
+                android:id="@+id/sb_rotationVector"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:max="3"
+                app:layout_constraintBottom_toBottomOf="@+id/cb_rotationVector"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/cb_rotationVector" />
 
             <CheckBox
                 android:id="@+id/cb_light"
@@ -73,6 +87,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cb_rotationVector" />
 
+            <SeekBar
+                android:id="@+id/sb_light"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:max="3"
+                app:layout_constraintBottom_toBottomOf="@+id/cb_light"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/cb_light" />
+
             <CheckBox
                 android:id="@+id/cb_temperature"
                 android:layout_width="wrap_content"
@@ -81,6 +104,15 @@
                 android:text="@string/ambient_temperature"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cb_light" />
+
+            <SeekBar
+                android:id="@+id/sb_temperature"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:max="3"
+                app:layout_constraintBottom_toBottomOf="@+id/cb_temperature"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/cb_temperature" />
 
             <CheckBox
                 android:id="@+id/cb_humidity"
@@ -91,6 +123,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cb_temperature" />
 
+            <SeekBar
+                android:id="@+id/sb_humidity"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:max="3"
+                app:layout_constraintBottom_toBottomOf="@+id/cb_humidity"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/cb_humidity" />
+
             <CheckBox
                 android:id="@+id/cb_pressure"
                 android:layout_width="wrap_content"
@@ -99,6 +140,15 @@
                 android:text="@string/pressure"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cb_humidity" />
+
+            <SeekBar
+                android:id="@+id/sb_pressure"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:max="3"
+                app:layout_constraintBottom_toBottomOf="@+id/cb_pressure"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/cb_pressure" />
 
             <CheckBox
                 android:id="@+id/cb_proximity"
@@ -109,6 +159,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cb_pressure" />
 
+            <SeekBar
+                android:id="@+id/sb_proximity"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:max="3"
+                app:layout_constraintBottom_toBottomOf="@+id/cb_proximity"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/cb_proximity" />
+
             <CheckBox
                 android:id="@+id/cb_gravity"
                 android:layout_width="wrap_content"
@@ -117,6 +176,15 @@
                 android:text="@string/gravity"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cb_proximity" />
+
+            <SeekBar
+                android:id="@+id/sb_gravity"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:max="3"
+                app:layout_constraintBottom_toBottomOf="@+id/cb_gravity"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/cb_gravity" />
 
             <CheckBox
                 android:id="@+id/cb_magneticField"
@@ -127,83 +195,116 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cb_gravity" />
 
-        </LinearLayout>
+            <SeekBar
+                android:id="@+id/sb_magneticField"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:max="3"
+                app:layout_constraintBottom_toBottomOf="@+id/cb_magneticField"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/cb_magneticField" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
-    <Button
-        android:id="@+id/start_button"
+    <EditText
+        android:id="@+id/camera_quality"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginBottom="10dp"
-        android:text="@string/start"
-        android:minEms="8"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/stop_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        android:text="@string/stop"
-        android:minEms="8"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <TextView
-        android:id="@+id/txt_port_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginBottom="20dp"
-        android:fontFamily="sans-serif-black"
-        android:text="@string/port_number"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/start_button"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:autofillHints="no"
+        android:ems="4"
+        android:inputType="number"
+        android:textAlignment="center"
+        android:text="@string/def_camera_quality"
+        app:layout_constraintBottom_toTopOf="@+id/txt_ip_address"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="LabelFor" />
 
     <EditText
         android:id="@+id/port_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="2dp"
         android:layout_marginBottom="10dp"
         android:autofillHints="no"
-        android:ems="10"
+        android:ems="4"
         android:inputType="number"
         android:singleLine="true"
         android:text="@string/def_port_number"
-        app:layout_constraintBottom_toTopOf="@+id/stop_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/txt_port_number"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/start_stop"
         tools:ignore="LabelFor" />
+
+    <EditText
+        android:id="@+id/ip_address"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="10dp"
+        android:autofillHints="no"
+        android:inputType="text"
+        android:singleLine="true"
+        android:text="@string/def_ip_address"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/port_number"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="LabelFor" />
+
+    <Button
+        android:id="@+id/start_stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/start"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/txt_ip_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginBottom="20dp"
-        android:text="@string/ip_address"
         android:fontFamily="sans-serif-black"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/txt_port_number"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:text="@string/ip_address"
+        app:layout_constraintBottom_toTopOf="@+id/ip_address"
+        app:layout_constraintStart_toStartOf="@+id/ip_address" />
 
-    <EditText
-        android:id="@+id/ip_address"
+    <TextView
+        android:id="@+id/txt_port_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:autofillHints="no"
-        android:ems="10"
-        android:inputType="text"
-        android:nextFocusDown="@+id/port_number"
-        android:singleLine="true"
-        android:text="@string/def_ip_address"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/port_number"
         app:layout_constraintBottom_toTopOf="@+id/port_number"
-        app:layout_constraintEnd_toEndOf="@+id/port_number"
-        app:layout_constraintStart_toStartOf="@+id/port_number"
-        tools:ignore="LabelFor" />
+        app:layout_constraintStart_toStartOf="@+id/port_number" />
 
+    <TextView
+        android:id="@+id/txt_camera_quality"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/image_quality"
+        app:layout_constraintBottom_toTopOf="@+id/camera_quality"
+        app:layout_constraintStart_toStartOf="@+id/camera_quality" />
+
+    <Spinner
+        android:id="@+id/rotations_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="30dp"
+        android:entries="@array/array_rotation"
+        app:layout_constraintBottom_toTopOf="@+id/txt_ip_address"
+        app:layout_constraintStart_toEndOf="@+id/camera_quality"
+        app:layout_constraintTop_toTopOf="@+id/camera_quality" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/image_rotation"
+        android:fontFamily="sans-serif-black"
+        app:layout_constraintBottom_toTopOf="@+id/rotations_spinner"
+        app:layout_constraintStart_toStartOf="@+id/rotations_spinner" />
 </androidx.constraintlayout.widget.ConstraintLayout>

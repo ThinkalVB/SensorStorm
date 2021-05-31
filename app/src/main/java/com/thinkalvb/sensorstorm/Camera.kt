@@ -128,10 +128,10 @@ class Camera(activity: Activity) {
     }
 
     fun startCamera(activity: MainActivity, quality: Int, rotation: Float){
+        if(!isAvailable) return
+
         mQuality = quality
         mRotation = rotation
-
-        if(!isAvailable) return
         isRunning = try {
             cameraProvider.bindToLifecycle(activity, cameraSelector, imageAnalyzer)
             true

@@ -1,11 +1,12 @@
 <resources>
     <string name="app_name">Sensor Storm</string>
     <string name="start">START</string>
-    <string name="stop">STOP</string>
-    <string name="port_number">Port Number</string>
-    <string name="ip_address">IP Address</string>
+    <string name="stop">STOP </string>
     <string name="def_ip_address">10.0.2.2</string>
     <string name="def_port_number">1357</string>
+    <string name="def_camera_quality">90</string>
+    <string name="port_number">Port Number</string>
+    <string name="ip_address">IP Address</string>
     <string name="acceleration">Acceleration</string>
     <string name="location">Location</string>
     <string name="camera">Camera</string>
@@ -17,4 +18,23 @@
     <string name="proximity">Proximity</string>
     <string name="gravity">Gravity</string>
     <string name="magnetic_field">Magnetic Field</string>
+    <string name="image_quality">Image Quality</string>
+    <string name="camera_resolution">Camera Resolution</string>
+    <string name="image_rotation">Image Rotation</string>
+
+    <string-array name="array_resolutions">
+        <item>176  x 144</item>
+        <item>320  x 240</item>
+        <item>352  x 288</item>
+        <item>640  x 480</item>
+        <item>1280 x 720</item>
+        <item>1280 x 960</item>
+    </string-array>
+
+    <string-array name="array_rotation">
+        <item>0  </item>
+        <item>90 </item>
+        <item>180</item>
+        <item>270</item>
+    </string-array>
 </resources>

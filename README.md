@@ -12,7 +12,7 @@ The camera sensor data starts with the sensor code 121 followed by the image seq
 [Amazon App Store](https://www.amazon.com/dp/B095SMCM5T/)
 
 ## Supported Android Sensors  
-1)  Camera (352 * 288 JPEG 90% quality)
+1)  Camera (352 * 288 JPEG)
 2)  Location
 3)  Acceleration
 4)  Rotation Vector
