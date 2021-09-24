@@ -18,7 +18,7 @@ class Location(activity: Activity) {
     private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var mLocationRequest: LocationRequest
     private lateinit var mLocationCallback: LocationCallback
-    private var mBroadcastBuffer = ByteBuffer.allocate((Double.SIZE_BYTES * 3) + Int.SIZE_BYTES).order(ByteOrder.LITTLE_ENDIAN)
+    private var mBroadcastBuffer = ByteBuffer.allocate(Float.SIZE_BYTES + (Double.SIZE_BYTES * 3) + Int.SIZE_BYTES).order(ByteOrder.LITTLE_ENDIAN)
 
     init {
         if(activity.packageManager.hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS)) {
@@ -39,6 +39,7 @@ class Location(activity: Activity) {
                     mBroadcastBuffer.putDouble(locationResult.lastLocation.latitude)
                     mBroadcastBuffer.putDouble(locationResult.lastLocation.longitude)
                     mBroadcastBuffer.putDouble(locationResult.lastLocation.altitude)
+                    mBroadcastBuffer.putFloat(locationResult.lastLocation.speed)
                     Broadcaster.sendData(mBroadcastBuffer.array())
                 }
             }
